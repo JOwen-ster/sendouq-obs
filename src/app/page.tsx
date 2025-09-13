@@ -44,7 +44,7 @@ export default function HomePage() {
       const res = await fetch(`/api/users/${id}`);
       const data = await res.json();
       console.log(data)
-    } catch (err ) {
+    } catch ( err ) {
       console.error(err);
     }
   }
