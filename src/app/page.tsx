@@ -39,6 +39,16 @@ export default function HomePage() {
     }
   }
 
+  async function fetchMatch(id: number) {
+    try {
+      const res = await fetch(`/api/users/${id}`);
+      const data = await res.json();
+      console.log(data)
+    } catch (err ) {
+      console.error(err);
+    }
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950 text-white p-6">
       <h1 className="text-2xl font-bold mb-4">Sendou User Lookup</h1>

@@ -4,7 +4,7 @@ export async function GET(
     req: Request,
     context: { params: Promise<{ username: string }> }
 ) {
-    const { username } = await context.params; // ✅ must await
+    const { username } = await context.params;
 
     try {
         const res = await fetch(`https://sendou.ink/u/${username}?_data`, {
