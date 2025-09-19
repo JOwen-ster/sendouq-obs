@@ -18,27 +18,22 @@ export default function HomePage() {
     let data: any;
     try {
       const res = await fetch(`/api/users/${name.toLowerCase()}`);
-      if (res.status == 500) {
-        toast(`${input} is not a valid user`);
-        return;
-      }
-      data = await res.json();
+      if (res.status == 500) return toast(`${input} is not a valid user`)
 
-      if (data?.user) {
-        if (!users.some((u) => u.discordId === data.user.discordId)) {
-          setUsers([
-            ...users,
-            {
-              id: data.user.id,
-              username: data.user.username,
-              discordId: data.user.discordId,
-            },
-          ]);
-          setUsername(data.user.username);
-        } else {
-          toast(`Already fetched ${data.user.username}`)
-        }
-      }  
+      data = await res.json();
+      if (data?.user && !users.some((u) => u.discordId === data.user.discordId)) {
+        setUsers([
+          ...users,
+          {
+            id: data.user.id,
+            username: data.user.username,
+            discordId: data.user.discordId,
+          },
+        ]);
+        setUsername(data.user.username);
+      } else {
+        toast(`Already fetched ${data.user.username}`)
+      }
     } catch (err) {
       console.log(err)
     }
