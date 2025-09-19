@@ -19,8 +19,9 @@ export default function HomePage() {
       if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
 
-      if (data?.user) {
+      if (data?.user && !users.some((u) => u.discordId === data.user.discordId)) {
         setUsers([
+          ...users,
           {
             id: data.user.id,
             username: data.user.username,
@@ -28,14 +29,10 @@ export default function HomePage() {
           },
         ]);
         setUsername(data.user.username);
-      } else {
-        setUsers([]);
-        setUsername(name);
       }
     } catch (err) {
+      // send toast that user does not exist
       console.error(err);
-      setUsers([]);
-      setUsername(name);
     }
   }
 
