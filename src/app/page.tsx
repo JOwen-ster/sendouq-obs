@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-
-interface User {
-  id: number;
-  username: string;
-  discordId: string;
-}
+import { toast } from "react-toastify";
 
 export default function HomePage() {
   const [input, setInput] = useState("");
@@ -39,19 +33,8 @@ export default function HomePage() {
     }
   }
 
-  async function fetchMatch(id: number) {
-    try {
-      const res = await fetch(`/api/users/${id}`);
-      const data = await res.json();
-      console.log(data)
-    } catch ( err ) {
-      console.error(err);
-    }
-  }
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950 text-white p-6">
-      <ToastContainer />
       <h1 className="text-2xl font-bold mb-4">Sendou User Lookup</h1>
 
       <form
@@ -68,7 +51,8 @@ export default function HomePage() {
           required
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter Sendou username"
+          placeholder="Enter Sendou URL Username"
+          size={25}
           className="px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button

@@ -1,5 +1,20 @@
 import { NextResponse } from "next/server";
 
+function extractMembers(data: any): { alpha: MemberInfo[]; bravo: MemberInfo[] } {
+    const pickFields = (member: any): MemberInfo => ({
+        username: member.username,
+        discordId: member.discordId,
+        discordAvatar: member.discordAvatar,
+        inGameName: member.inGameName ?? null, // undefined -> null
+        plusTier: member.plusTier,
+    });
+
+    return {
+        alpha: data.groupAlpha.members.map(pickFields),
+        bravo: data.groupBravo.members.map(pickFields),
+    };
+}
+
 export async function GET(
     req: Request,
     context: { params: Promise<{ id: string }> }
@@ -7,7 +22,7 @@ export async function GET(
     const { id } = await context.params;
 
     try {
-        const res = await fetch(`https://sendou.ink/match/${id}?_data`, {
+        const res = await fetch(`https://sendou.ink/q/match/${id}?_data`, {
             cache: "no-store",
         });
 
@@ -16,8 +31,11 @@ export async function GET(
         }
 
         const data = await res.json();
-        console.log(data)
-        return NextResponse.json(data);
+
+        // Extract member
+        const members = extractMembers(data);
+
+        return NextResponse.json(members);
     } catch (err) {
         return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
     }
