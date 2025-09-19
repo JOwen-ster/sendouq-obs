@@ -65,6 +65,7 @@ export default function HomePage() {
       >
         <input
           type="text"
+          required
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter Sendou username"
