@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 interface User {
   id: number;
@@ -14,25 +15,32 @@ export default function HomePage() {
   const [username, setUsername] = useState<string | null>(null);
 
   async function fetchUser(name: string) {
+    let data: any;
     try {
-      const res = await fetch(`/api/users/${name}`);
-      if (!res.ok) throw new Error("Failed to fetch");
-      const data = await res.json();
-
-      if (data?.user && !users.some((u) => u.discordId === data.user.discordId)) {
-        setUsers([
-          ...users,
-          {
-            id: data.user.id,
-            username: data.user.username,
-            discordId: data.user.discordId,
-          },
-        ]);
-        setUsername(data.user.username);
+      const res = await fetch(`/api/users/${name.toLowerCase()}`);
+      if (res.status == 500) {
+        toast(`${input} is not a valid user`);
+        return;
       }
+      data = await res.json();
+
+      if (data?.user) {
+        if (!users.some((u) => u.discordId === data.user.discordId)) {
+          setUsers([
+            ...users,
+            {
+              id: data.user.id,
+              username: data.user.username,
+              discordId: data.user.discordId,
+            },
+          ]);
+          setUsername(data.user.username);
+        } else {
+          toast(`Already fetched ${data.user.username}`)
+        }
+      }  
     } catch (err) {
-      // send toast that user does not exist
-      console.error(err);
+      console.log(err)
     }
   }
 
@@ -48,6 +56,7 @@ export default function HomePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950 text-white p-6">
+      <ToastContainer />
       <h1 className="text-2xl font-bold mb-4">Sendou User Lookup</h1>
 
       <form
