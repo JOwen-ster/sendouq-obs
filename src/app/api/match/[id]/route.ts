@@ -5,8 +5,8 @@ function extractMembers(data: any): { alpha: MemberInfo[]; bravo: MemberInfo[] }
         username: member.username,
         discordId: member.discordId,
         discordAvatar: member.discordAvatar,
-        inGameName: member.inGameName ?? null, // undefined -> null
-        plusTier: member.plusTier,
+        inGameName: member.inGameName ?? null, // undefined -> null (always resent in JSON)
+        plusTier: member.plusTier, // can be undefined (only present if isPlus = true - isPlus is always defined)
     });
 
     return {
